@@ -389,10 +389,12 @@ async def update_project(
     deadline: str = None,
     tags: List[str] = None,
     completed: bool = None,
-    canceled: bool = None
+    canceled: bool = None,
+    area_id: str = None,
+    area: str = None
 ) -> str:
     """Update an existing project in Things
-    
+
     Args:
         id: ID of the project to update
         title: New title
@@ -402,6 +404,8 @@ async def update_project(
         tags: New tags
         completed: Mark as completed
         canceled: Mark as canceled
+        area_id: ID of area to move project into (takes precedence over area)
+        area: Title of area to move project into
     """
     url = url_scheme.update_project(
         id=id,
@@ -411,7 +415,9 @@ async def update_project(
         deadline=deadline,
         tags=tags,
         completed=completed,
-        canceled=canceled
+        canceled=canceled,
+        area_id=area_id,
+        area=area
     )
     url_scheme.execute_url(url)
     return f"Updated project with ID: {id}"

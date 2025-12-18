@@ -246,6 +246,77 @@ class TestUpdateProject:
         assert "completed=false" in url
         assert "canceled=true" in url
 
+    @patch('things.token')
+    def test_update_project_with_area_id(self, mock_token):
+        """Test updating project with area_id."""
+        mock_token.return_value = "auth-token"
+        url = update_project(
+            id="project-123",
+            area_id="area-456"
+        )
+
+        assert "id=project-123" in url
+        assert "area-id=area-456" in url
+        assert "auth-token=auth-token" in url
+
+    @patch('things.token')
+    def test_update_project_with_area_title(self, mock_token):
+        """Test updating project with area title."""
+        mock_token.return_value = "auth-token"
+        url = update_project(
+            id="project-123",
+            area="Work Area"
+        )
+
+        assert "id=project-123" in url
+        assert "area=Work%20Area" in url
+        assert "auth-token=auth-token" in url
+
+    @patch('things.token')
+    def test_update_project_area_id_precedence(self, mock_token):
+        """Test that both area_id and area can be provided."""
+        mock_token.return_value = "auth-token"
+        url = update_project(
+            id="project-123",
+            area_id="area-456",
+            area="Work Area"
+        )
+
+        # Both should be in URL; Things URL scheme handles precedence
+        assert "area-id=area-456" in url
+        assert "area=Work%20Area" in url
+
+    @patch('things.token')
+    def test_update_project_remove_from_area(self, mock_token):
+        """Test removing project from area with empty string."""
+        mock_token.return_value = "auth-token"
+        url = update_project(
+            id="project-123",
+            area_id=""
+        )
+
+        assert "id=project-123" in url
+        assert "area-id=" in url
+
+    @patch('things.token')
+    def test_update_project_full_with_area(self, mock_token):
+        """Test updating project with area plus other fields."""
+        mock_token.return_value = "auth-token"
+        url = update_project(
+            id="project-123",
+            title="Moved Project",
+            notes="Now in different area",
+            area_id="area-789",
+            when="someday",
+            tags=["relocated"]
+        )
+
+        assert "id=project-123" in url
+        assert "title=Moved%20Project" in url
+        assert "area-id=area-789" in url
+        assert "when=someday" in url
+        assert "tags=relocated" in url
+
 
 class TestShow:
     """Test the show function."""

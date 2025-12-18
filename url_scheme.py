@@ -121,7 +121,8 @@ def update_todo(id: str, title: Optional[str] = None, notes: Optional[str] = Non
 def update_project(id: str, title: Optional[str] = None, notes: Optional[str] = None,
                    when: Optional[str] = None, deadline: Optional[str] = None,
                    tags: Optional[list[str]] = None, completed: Optional[bool] = None,
-                   canceled: Optional[bool] = None) -> str:
+                   canceled: Optional[bool] = None, area_id: Optional[str] = None,
+                   area: Optional[str] = None) -> str:
     """Construct URL to update an existing project."""
     params = {
         'id': id,
@@ -131,7 +132,9 @@ def update_project(id: str, title: Optional[str] = None, notes: Optional[str] = 
         'deadline': deadline,
         'tags': tags,
         'completed': completed,
-        'canceled': canceled
+        'canceled': canceled,
+        'area-id': area_id,
+        'area': area
     }
     return construct_url('update-project', {k: v for k, v in params.items() if v is not None})
 
